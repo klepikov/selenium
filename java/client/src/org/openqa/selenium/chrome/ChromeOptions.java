@@ -71,6 +71,7 @@ public class ChromeOptions {
   public static final String CAPABILITY = "chromeOptions";
 
   private String binary;
+  private String androidPackage;
   private List<String> args = Lists.newArrayList();
   private List<File> extensionFiles = Lists.newArrayList();
   private Map<String, Object> experimentalOptions = Maps.newHashMap();
@@ -95,6 +96,16 @@ public class ChromeOptions {
    */
   public void setBinary(String path) {
     binary = checkNotNull(path);
+  }
+
+  /**
+   * Sets the Android package name for Chrome. The package should already exist
+   * on the Android device.
+   *
+   * @param package_name Name of Chrome's Android package.
+   */
+  public void setAndroidPackage(String package_name) {
+    androidPackage = checkNotNull(package_name);
   }
 
   /**
@@ -174,6 +185,10 @@ public class ChromeOptions {
 
     if (binary != null) {
       options.put("binary", binary);
+    }
+
+    if (androidPackage != null) {
+      options.put("androidPackage", androidPackage);
     }
 
     options.put("args", ImmutableList.copyOf(args));

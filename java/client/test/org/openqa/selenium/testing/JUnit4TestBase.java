@@ -28,6 +28,7 @@ import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.Pages;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.environment.GlobalTestEnvironment;
 import org.openqa.selenium.environment.InProcessTestEnvironment;
 import org.openqa.selenium.environment.TestEnvironment;
@@ -94,6 +95,16 @@ public abstract class JUnit4TestBase implements WrapsDriver {
   public static WebDriver actuallyCreateDriver() {
     WebDriver driver = storedDriver.get();
 
+    // If the driver is left in a bad state, create a new one.
+    // This happens on Android after any test that creates its own driver.
+    // Since only one instance of Chrome can run on Android at a time, the
+    // stored driver's browser is destroyed.
+    try {
+      if (driver != null)
+        driver.getCurrentUrl();
+    } catch (WebDriverException e) {
+      driver = null;
+    }
     if (driver == null) {
       driver = new WebDriverBuilder().get();
       storedDriver.set(driver);

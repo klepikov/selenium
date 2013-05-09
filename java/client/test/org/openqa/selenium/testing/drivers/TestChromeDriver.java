@@ -76,6 +76,10 @@ public class TestChromeDriver extends RemoteWebDriver implements TakesScreenshot
     if (chromePath != null) {
       options.setBinary(new File(chromePath));
     }
+    String androidPackage = System.getProperty("webdriver.chrome.android_package");
+    if (androidPackage != null) {
+      options.setAndroidPackage(androidPackage);
+    }
 
     DesiredCapabilities capabilities = DesiredCapabilities.chrome();
     capabilities.setCapability(ChromeOptions.CAPABILITY, options);
